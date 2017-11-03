@@ -25,29 +25,31 @@ public class SsimCalculator
     {
         this.refImage = getBufferedImageForBytes(loadFile(referenceFile));
     }
+
+    public SsimCalculator(BufferedImage referenceBuffer) throws SsimException, IOException 
+    {
+        this.refImage = referenceBuffer;
+    }
     
     private BufferedImage getReferenceImage()
     {
         return refImage;
     }
     
-    private WindowManager getWindowManager(byte[] compBytes) throws SsimException, IOException
-    {
-        final BufferedImage compImg = getBufferedImageForBytes(compBytes);
-        
+    private WindowManager getWindowManager(BufferedImage compBuffer) throws SsimException, IOException
+    {        
         if (getReferenceImage().getColorModel().getPixelSize() 
-                != compImg.getColorModel().getPixelSize())
+                != compBuffer.getColorModel().getPixelSize())
         {
             throw new SsimException("bits per pixel of images don't match");
         }
         
-        return new WindowManager(getReferenceImage(), compImg);
+        return new WindowManager(getReferenceImage(), compBuffer);
     }
     
-    public double compareTo(File comp) throws SsimException, IOException 
+    public double compareTo(BufferedImage compBuffer) throws SsimException, IOException 
     {
-        final byte[] compBytes = loadFile(comp);
-        final WindowManager manager = getWindowManager(compBytes);
+        final WindowManager manager = getWindowManager(compBuffer);
         
         final int[] size = getReferenceImage().getColorModel().getComponentSize();
         final long L = (long) pow(2, size[0]) - 1;
@@ -107,6 +109,9 @@ public class SsimCalculator
         {
             return ImageIO.read(is);
         }
+
+    public double compareTo(File compFile) {
+        return compareTo(getBufferedImageForBytes(loadFile(compFile)));
     }
 
     private byte[] loadFile(File fileToLoad) throws IOException 
