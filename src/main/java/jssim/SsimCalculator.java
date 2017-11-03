@@ -109,8 +109,9 @@ public class SsimCalculator
         {
             return ImageIO.read(is);
         }
+    }
 
-    public double compareTo(File compFile) {
+    public double compareTo(File compFile) throws SsimException, IOException {
         return compareTo(getBufferedImageForBytes(loadFile(compFile)));
     }
 
