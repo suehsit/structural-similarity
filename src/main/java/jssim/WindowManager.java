@@ -22,7 +22,7 @@ class WindowManager
         if (refImage.getWidth() != comparisonImage.getWidth()
                 || refImage.getHeight() != comparisonImage.getHeight()) 
         {
-            throw new SsimException("Image dimmensions are not the same");
+            throw new SsimException("Image dimensions are not the same");
         }
         
         int width = getNearestMultipleOf(refImage.getWidth(), WIN_SIZE);
